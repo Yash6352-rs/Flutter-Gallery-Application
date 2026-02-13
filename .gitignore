@@ -1,0 +1,58 @@
+# Flutter/Dart
+.dart_tool/
+.buildlog/
+.packages
+.pub-cache/
+.flutter-plugins
+.flutter-plugins-dependencies
+.pub/
+build/
+*.lock
+
+# Android
+android/.gradle/
+android/app/debug/
+android/app/profile/
+android/app/release/
+*.iml
+
+# iOS
+ios/Flutter/Flutter.podspec
+ios/Pods/
+ios/Runner.xcworkspace/
+ios/Flutter/Flutter.framework
+ios/Flutter/Flutter.podspec
+ios/Flutter/Generated.xcconfig
+*.xcuserdatad
+*.xcscmblueprint
+
+# Web
+web/manifest.json
+
+# Windows
+windows/flutter_build/
+windows/runner/Debug/
+windows/runner/Release/
+windows/runner/utils.cpp
+windows/runner/utils.h
+windows/runner/win32_window.cpp
+windows/runner/win32_window.h
+windows/runner/resources/app_icon.ico
+windows/runner/runner.exe.manifest
+
+# Linux
+linux/flutter_build/
+linux/build/
+*.so
+
+# MacOS
+macos/Flutter/Flutter.framework
+macos/Flutter/GeneratedPluginRegistrant.*
+
+# VS Code / IDE
+.vscode/
+.idea/
+*.iml
+
+# Logs
+*.log
