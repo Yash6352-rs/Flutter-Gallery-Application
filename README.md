@@ -149,14 +149,13 @@ This project follows MVVM (Model-View-ViewModel) architecture with Riverpod for 
 ## 5. Collection Screen
 
 ### - Folder-style layout.
-
-      - Categories:
-      - Images
-      - Videos
-      - Camera
-      - Screenshots
-      - Downloads
-      - Others
+Categories:
+- Images
+- Videos
+- Camera
+- Screenshots
+- Downloads
+- Others
 
 ## 6. Settings & About
 
@@ -193,7 +192,7 @@ This project follows MVVM (Model-View-ViewModel) architecture with Riverpod for 
 ### 3. Install dependencies:
 - flutter pub get
 
-### Run the application:
+### 4. Run the application:
 - flutter run
 
 ---
