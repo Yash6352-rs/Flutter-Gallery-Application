@@ -126,11 +126,10 @@ Liked Screen
    Implemented horizontal swipe navigation in DetailScreen using PageView, allowing users to swipe left/right to 
    browse media seamlessly while preserving Hero animations and video playback support.
 
+28. GitHub Integration & Version Management
+   Implemented proper Git workflow (add, commit, push) and maintained project history on GitHub.
 
 ----------------------------------------------------------------
-
-
-
 
 POST https://dummyjson.com/auth/login
 GET https://dummyjson.com/users
@@ -305,5 +304,32 @@ Repository
 Network
    ↓
 Show Users
+
+
+----------------------------------------------------------------
+
+Fastest way to push future changes from your VS Code terminal or any terminal:
+
+Stage all changes
+   git add .
+
+Commit with a message
+   git commit -m "Your descriptive message here"
+
+Push to GitHub
+   git push
+
+You can do all three steps (add → commit → push) in one line like this:
+   git add . && git commit -m "Your message here" && git push
+   
+
+
+I already have git done on this project
+project me further command that modify can also get saved on github
+
+git pull origin main --rebase
+git add.
+get commit
+git push origin main
 
 ----------------------------------------------------------------
