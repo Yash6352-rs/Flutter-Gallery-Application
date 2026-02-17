@@ -17,7 +17,9 @@ class MediaModel {
 
  factory MediaModel.fromJson(Map<String, dynamic> json) {
     return MediaModel(
-      id: json['id'],
+      id: json['id'] is int 
+        ? json['id']
+        : int.parse(json['id'].toString()),
       title: json['title'],
       url: json['url'],
       thumbnailUrl: json['thumbnailUrl'],

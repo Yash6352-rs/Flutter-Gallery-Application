@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:gallery_application/data/models/media_model.dart';
+import 'package:gallery_application/view_model/deleted_provider.dart';
+import 'package:gallery_application/view_model/grid_provider.dart';
+import 'package:gallery_application/view_model/locked_provider.dart';
 import 'package:gallery_application/view_model/media_provider.dart';
 import 'package:go_router/go_router.dart';
 
@@ -16,6 +19,9 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     final mediaAsync = ref.watch(mediaProvider);
+    final deletedList = ref.watch(deletedProvider);
+    final lockedList = ref.watch(lockedProvider);
+    final gridCount = ref.watch(gridCountProvider);
     final theme = Theme.of(context);
 
     return Scaffold(
@@ -40,22 +46,33 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
             error: (error, stack) => Center(
                 child: Text('Error: $error', style: TextStyle(color: theme.textTheme.bodyMedium?.color),)), 
 
-            data: (mediaList) {
+            data: (mediaList) {    
+              
+              // Show only media that is NOT in deleted and locked list    
+              final visibleMedia = mediaList.where((media) { 
+                final isDeleted = deletedList.any((item) => item.id == media.id);
+                final isLocked = lockedList.any((item) => item.id == media.id);
+
+                return !isDeleted && !isLocked;
+              }).toList();
+
               return GridView.builder(
-                
-                itemCount: mediaList.length,
+                itemCount: visibleMedia.length,
                 padding: EdgeInsets.all(8),
                 gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                  crossAxisCount: 3, 
+                  crossAxisCount: gridCount, 
                   crossAxisSpacing: 8, 
                   mainAxisSpacing: 8
                 ), 
+                
                 itemBuilder: (context, index) {   
-                  final media = mediaList[index];
+                  final media = visibleMedia[index];
             
                   return InkWell(
                     onTap: () { 
-                      context.pushNamed('detail', extra: { 'media': media, 'tag': "home_${media.id}"});
+                      context.pushNamed('detail', extra: { 
+                        'mediaList': visibleMedia, 'initialIndex': index, 'source': 'home',
+                      });
                     },
                     child: ClipRRect(               
                       borderRadius: BorderRadius.circular(12),                
@@ -82,7 +99,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                       ),
                     ),
                   ); 
-                  
+                 
                 }
               );
             },      

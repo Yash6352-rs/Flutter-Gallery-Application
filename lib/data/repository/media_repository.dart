@@ -28,7 +28,7 @@ class MediaRepository {
       MediaModel(
         id: 1001, 
         title: 'Sample Video 1', 
-        url:  'https://flutter.github.io/assets-for-api-docs/assets/videos/bee/.mp4', 
+        url:  'https://flutter.github.io/assets-for-api-docs/assets/videos/bee.mp4', 
         thumbnailUrl: 'https://picsum.photos/seed/video1/300/300', 
         type: MediaType.video,
       ),

@@ -46,6 +46,10 @@ class LikedNotifier extends StateNotifier<List<MediaModel>> {
 
     state = loadedList;  
   }    
+
+  void removeById(int id) {
+    state = state.where((item) => item.id != id).toList();
+  }
 }
 
 

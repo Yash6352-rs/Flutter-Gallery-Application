@@ -105,9 +105,29 @@ Liked Screen
 22 Feature Placeholder Handling
    Implemented “Feature Coming Soon” feedback using reusable SnackBar utility for incomplete features.
 
+23. Detail Screen Properties Panel
+   Added a “Properties” button in the detail view that opens a showModalBottomSheet to display media information.
+   Such as title, type, URL, and video duration.
+
+24. Soft Delete & Bin Management
+   Implemented soft delete functionality using a DeletedProvider to move media to a Bin section 
+   with restore support and persistent storage via SharedPreferences.   
+
+25. Locked Media Management
+   Added password-protected Locked Folder with hide/unhide functionality, state filtering across screens, 
+   and local persistence using SharedPreferences.
+
+26. Dynamic Grid Layout Selector
+   Implemented customizable grid layout feature using a gridCountProvider (Riverpod).
+   Added a Grid icon in the AppBar that opens a showModalBottomSheet allowing users to select 2, 3, or 4 columns 
+   with active selection highlighting for better UX.
+
+27. Swipeable Detail Viewer
+   Implemented horizontal swipe navigation in DetailScreen using PageView, allowing users to swipe left/right to 
+   browse media seamlessly while preserving Hero animations and video playback support.
 
 
-
+----------------------------------------------------------------
 
 
 

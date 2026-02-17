@@ -2,6 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:gallery_application/data/models/media_model.dart';
 import 'package:gallery_application/utils/common_ui.dart';
+import 'package:gallery_application/view_model/deleted_provider.dart';
+import 'package:gallery_application/view_model/grid_provider.dart';
+import 'package:gallery_application/view_model/locked_provider.dart';
 import 'package:gallery_application/view_model/media_provider.dart';
 import 'package:go_router/go_router.dart';
 
@@ -14,10 +17,14 @@ class CollectionScreen extends ConsumerStatefulWidget {
 
 class _CollectionScreen extends ConsumerState<CollectionScreen> {
   String? selectedType;
+  static const String fixedPassword = '1234';
 
   @override
   Widget build(BuildContext context) {
     final mediaAsync = ref.watch(mediaProvider);
+    final deletedList = ref.watch(deletedProvider);
+    final lockedList = ref.watch(lockedProvider);
+    final gridCount = ref.watch(gridCountProvider);
     final theme = Theme.of(context);
 
     return Scaffold(
@@ -41,11 +48,20 @@ class _CollectionScreen extends ConsumerState<CollectionScreen> {
                       },                  
                     ),
                     Text(
-                      selectedType == null
-                        ? "Collection"
-                        : selectedType == "image"
-                            ? "Images"
-                            : "Videos",
+                      selectedType == 'image'
+                        ? "Images"
+                        : selectedType == 'video'
+                            ? "Videos"
+                            : selectedType == 'camera'
+                                ? "Camera"
+                                : selectedType == 'download'
+                                    ? "Download"
+                                    : selectedType == 'screenshot'
+                                        ? "Screenshot"
+                                        : selectedType == 'other'
+                                            ? "Others"
+                                            : "Gallery",
+                     
                       style: TextStyle(
                         fontSize: 26, fontWeight: FontWeight.w400, color: theme.textTheme.headlineSmall?.color
                         ),
@@ -86,12 +102,12 @@ class _CollectionScreen extends ConsumerState<CollectionScreen> {
                           }, context),   
                           _folderCard("Camera", Icons.photo_camera, () {
                             setState(() {
-                              selectedType = "screenshot";
+                              selectedType = "camera";
                             });
                           }, context), 
                           _folderCard("Download", Icons.download, () {
                             setState(() {
-                              selectedType = "others";
+                              selectedType = "download";
                             });
                           }, context), 
                           _folderCard("Screenshot", Icons.screenshot_outlined, () {
@@ -101,7 +117,7 @@ class _CollectionScreen extends ConsumerState<CollectionScreen> {
                           }, context), 
                           _folderCard("Others", Icons.photo_album_outlined, () {
                             setState(() {
-                              selectedType = "others";
+                              selectedType = "other";
                             });
                           }, context)            
                         ],
@@ -109,29 +125,52 @@ class _CollectionScreen extends ConsumerState<CollectionScreen> {
                     );
                   }
                           
-                  // show filtered media
-                  final filtered = mediaList.where((media) {
-                    return selectedType == "image"
-                      ? media.type == MediaType.image
-                      : media.type == MediaType.video;
+                  // show filtered media               
+                  final filteredMedia = mediaList.where((media) {
+                    final isDeleted = deletedList.any((item) => item.id == media.id);
+                    final isLocked = lockedList.any((item) => item.id == media.id);
+
+                    if (isDeleted || isLocked) return false;
+
+                    if (selectedType == "image") {
+                      return media.type == MediaType.image;
+                    }
+                    if (selectedType == 'video') {
+                      return media.type == MediaType.video;
+                    }
+                    if (selectedType == 'camera' || selectedType == ' download' || selectedType == ' screenshot' || selectedType == ' others') { 
+                      return false;
+                    }
+
+                    return false;
                   }).toList();
+
+                  if (filteredMedia.isEmpty) {
+                    return Padding(padding: EdgeInsets.all(40),
+                      child: Center(
+                        child: Text("No ${selectedType!.toUpperCase()} media yet", style: theme.textTheme.bodyLarge),
+                      ),
+                    );
+                  }
                           
                   return GridView.builder(
                     shrinkWrap: true,
                     physics: const NeverScrollableScrollPhysics(),
                     padding: EdgeInsets.all(8),
-                    itemCount: filtered.length,
+                    itemCount: filteredMedia.length,
                     gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                      crossAxisCount: 3,
+                      crossAxisCount: gridCount,
                       crossAxisSpacing: 8,
                       mainAxisSpacing: 8
-                    ), 
+                    ),
                     itemBuilder: (context, index) {
-                      final media = filtered[index];
+                      final media = filteredMedia[index];
                           
                       return InkWell(
                         onTap: () {
-                          context.pushNamed('detail', extra: {'media': media, 'tag': 'collection_${media.id}'});
+                          context.pushNamed('detail', extra: { 
+                            'mediaList': filteredMedia, 'initialIndex': index, 'source': 'home',
+                          });
                         },
                         child: ClipRRect(
                           borderRadius: BorderRadius.circular(12),
@@ -164,10 +203,10 @@ class _CollectionScreen extends ConsumerState<CollectionScreen> {
                     ListTile(
                       leading: Icon(Icons.delete_outline_rounded),
                       title: Text('Bin'),
-                      subtitle: Text("This feature will be available soon"),
+                      subtitle: Text("This feature shows deleted media"),
                       trailing: Icon(Icons.arrow_forward_ios_outlined, size: 16),
                       onTap: () {
-                        CommonUI.showSnackBar(context, "Feature coming soon");                      
+                        context.pushNamed('bin');
                       }
                     ),
                       
@@ -192,12 +231,12 @@ class _CollectionScreen extends ConsumerState<CollectionScreen> {
                     ),
                       
                     ListTile(
-                      leading: Icon(Icons.lock_outline_sharp),
-                      subtitle: Text("This feature will be available soon"),
+                      leading: Icon(Icons.lock_outline_sharp),                      
                       title: Text('Locked'),
+                      subtitle: Text("This option shows locked media"),
                       trailing: Icon(Icons.arrow_forward_ios_outlined, size: 16),
                       onTap: () {
-                        CommonUI.showSnackBar(context, "Feature coming soon");
+                        openLockedFolder(context);
                       }
                     ),                      
                     SizedBox(height: 20,)
@@ -208,6 +247,44 @@ class _CollectionScreen extends ConsumerState<CollectionScreen> {
           ],
         ),
       )
+    );
+  }
+
+  void openLockedFolder(BuildContext context) {
+    final controller = TextEditingController();
+
+    showDialog(
+      context: context, 
+      builder: (context) {
+        return AlertDialog(
+          title: Text('Enter Password'),
+          content: TextField(
+            controller: controller,
+            obscureText: true,
+            keyboardType: TextInputType.number,
+            decoration: InputDecoration(
+              hintText: 'Enter Password'
+            ),
+          ),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.pop(context), 
+              child: Text('Cancel'),
+            ),
+            TextButton(
+              onPressed: () {
+                if (controller.text == fixedPassword) {
+                  Navigator.pop(context);
+                  context.pushNamed('lock');             
+                } else {
+                  CommonUI.showSnackBar(context, "Wrong Password");
+                }
+              }, 
+              child: Text('OK')
+            ),
+          ],
+        );
+      }
     );
   }
 }
