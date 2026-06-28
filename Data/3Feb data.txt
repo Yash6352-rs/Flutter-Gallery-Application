@@ -1,0 +1,341 @@
+1) Provider Consumer
+Light mode Dark mode switch
+
+refer ..... flutter_application_6............
+
+------------------------------------------------------------------------------------------
+
+2) GO Router (Setup of Go Router)
+3) for child sub routes not to add / (slash)
+4) Route parameter (Passing parameter to route)
+5} Named Route 
+6} Query Parameter
+7) Redirect (using redirect)
+8) Error handling (using errorBuilder) 
+9) Go vs Push (goNamed vs pushNamed)
+   (push will stack one page on other)
+10) Transition Animation (FadeTransition)
+
+------------------------------------------------------------------------------------------
+
+2) GO Router Setup of GoRouter
+
+main file
+
+class MyApp extends StatelessWidget {
+  MyApp({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp.router(
+      title: 'Go Router',
+      routerConfig: _router,
+    );
+  }
+
+  final GoRouter _router = GoRouter(
+    //initialLocation: "/profile",
+    routes: [
+    GoRoute(path: "/", builder: (context, state) => const Dashboard()),
+    GoRoute(path: "/profile", builder: (context, state) => const Profile())
+
+  ]);
+}
+
+Dashboard file
+
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('Dashboard'),
+      ),
+      body: Center(
+        child: ElevatedButton(
+          onPressed: () {
+            //GoRouter.of(context).go("/profile");
+            context.go("/profile");
+          },
+          child: Text('Profile'),
+       ),
+      )
+    );
+  }
+}
+
+Profile file
+
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('Profile'),
+      ),
+      body: Center(
+        child: ElevatedButton(
+          onPressed: () {
+            //GoRouter.of(context).go("/");
+            context.go("/");
+          },
+          child: Text('Dashboard')),
+      ),
+    );
+  }
+}
+
+------------------------------------------------------------------------------------------
+
+3) GoRouter for child sub routes not to add / (slash)
+
+  final GoRouter _router = GoRouter(
+    //initialLocation: "/profile",
+    routes: [
+    GoRoute(path: "/", builder: (context, state) => const Dashboard(),
+    // for child sub routes not to add / (slash)
+    routes: [
+      GoRoute(path: "profile", builder: (context, state) => const Profile())
+    ]
+    ),
+  ]);
+
+----------------------------------------------------------------------------------
+
+4) GoRouter Route parameter (Passing parameter to route)
+
+mail file
+  final GoRouter _router = GoRouter(
+    //initialLocation: "/profile",
+    routes: [
+    GoRoute(path: "/", builder: (context, state) => const Dashboard(),),
+    GoRoute(path: "/profile/:name", builder: (context, state) => Profile(
+      name: state.pathParameters["name"]!
+    ))
+  ]);
+
+ Dashboard file
+   child: ElevatedButton(
+          onPressed: () {
+            //GoRouter.of(context).go("/profile");
+            String name = "ABCD";
+            context.go("/profile/$name");
+          },
+          child: Text('Profile'),
+       ),
+
+----------------------------------------------------------------------------------
+
+5} GoRouter Named Route 
+
+main 
+  final GoRouter _router = GoRouter(
+    //initialLocation: "/profile",
+    routes: [
+    GoRoute(name: RouteNames.dashboard, path: "/", builder: (context, state) => const Dashboard(),
+    routes: [
+          GoRoute(name: RouteNames.profile, path: "/profile/:name", builder: (context, state) => Profile(
+            name: state.pathParameters["name"]!  
+      ))
+    ]
+    ),
+  ]);
+
+dashboard file
+ child: ElevatedButton(
+          onPressed: () {
+            //GoRouter.of(context).go("/profile");
+            context.goNamed(RouteNames.profile, pathParameters: {"name": "DCBA"});
+          },
+          child: Text('Profile'),
+
+profile file
+child: ElevatedButton(
+          onPressed: () {
+            //GoRouter.of(context).go("/");
+            context.goNamed(RouteNames.dashboard);
+          },
+
+route_names file
+
+class RouteNames {
+
+  static const dashboard = "dashboard";
+  static const profile = "profile";
+}
+----------------------------------------------------------------------------------
+6} GoRouter Query Parameter
+
+main 
+ final GoRouter _router = GoRouter(
+    //initialLocation: "/profile",
+    routes: [
+    GoRoute(name: RouteNames.dashboard, path: "/", builder: (context, state) => const Dashboard(),
+    routes: [
+          GoRoute(name: RouteNames.profile, path: "profile", builder: (context, state) => Profile(
+            userName: state.uri.queryParameters['name']!,        
+      ))
+    ]
+    ),
+  ]);
+
+dashboard file
+         child: ElevatedButton(
+          onPressed: () {
+            //GoRouter.of(context).go("/profile");
+            context.goNamed(RouteNames.profile, queryParameters: {'name': 'BCDA',});
+          },
+          child: Text('Profile'),
+       ),
+      )
+    );
+
+//same as above (no change)
+profile file
+route_names file
+
+
+----------------------------------------------------------------------------------
+
+7) GoRouter Redirect (using redirect)
+
+main file
+
+final isLoggedIn = false;
+
+class MyApp extends StatelessWidget {
+  MyApp({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp.router(
+      title: 'Go Router',
+      routerConfig: _router,
+    );
+  }
+
+  final GoRouter _router = GoRouter(
+    //initialLocation: "/profile",
+    redirect: (context, state) {
+      if(isLoggedIn){
+        return "/dashboard";
+      }
+      else{
+        return "/";
+      }
+    },
+    routes: [
+    GoRoute(path: "/", builder: (context, state) => Login(),),
+    GoRoute(path: "/dashboard", builder: (context, state) =>  Dashboard())
+  
+  ]);
+
+//same as above (no change) 
+dashboard file
+profile file
+route_names file
+
+----------------------------------------------------------------------------------
+
+8) GoRouter Error handling (using errorBuilder) 
+
+main file
+final isLoggedIn = false;
+
+class MyApp extends StatelessWidget {
+  MyApp({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp.router(
+      title: 'Go Router',
+      routerConfig: _router,
+    );
+  }
+
+  final GoRouter _router = GoRouter(
+    //initialLocation: "/profile",
+    errorBuilder: (context, state) => ErrorPage(),
+    redirect: (context, state) {
+      if(isLoggedIn){
+        return "/test";
+      }
+      else{
+        return "/";
+      }
+    },
+    routes: [
+    GoRoute(path: "/", builder: (context, state) => Login(),),
+    GoRoute(path: "/dashboard", builder: (context, state) =>  Dashboard())
+  
+  ]);
+
+ ---------------------------------------------------------------------------------
+
+ 9) GoRouter Go vs Push
+ goNamed vs pushNamed
+ (push will stack one page on other)
+
+main file
+   routes: [
+    GoRoute(name: RouteNames.pageA, path: "/", builder: (context, state) =>  PageA(),
+    routes: [
+      GoRoute(name: RouteNames.pageB, path: "pageB", builder: (context, state) =>  PageB()),
+      GoRoute(name: RouteNames.pageC, path: "pageC", builder: (context, state) =>  PageC()),
+    ]),
+  ]);
+
+page A
+body: Center(
+        child: ElevatedButton(
+          onPressed: () => context.goNamed(RouteNames.pageB),
+          child: Text('Go to Page B')
+        ),
+      )
+
+page B
+ body: Center(
+        child: ElevatedButton(
+          onPressed: () => context.pushNamed(RouteNames.pageC),
+          child: Text('Go to Page C')   
+       )
+      ),  
+
+page C
+body: Center(
+        child: Text('this is pageC page')),
+                  
+------------------------------------------------------------------------------------
+
+10) GoRouter Transition Animation (FadeTransition)
+
+main file
+final GoRouter _router = GoRouter(
+    routes: [
+    GoRoute(path: "/", builder: (context, state) => const Dashboard()),
+    GoRoute(
+      path: '/profile',
+      pageBuilder: (context, state) {
+        return CustomTransitionPage(
+          //transitionDuration: const Duration(seconds: 1),
+          fullscreenDialog: true,
+          key: state.pageKey,
+          child: const Profile(), 
+          transitionsBuilder: (context, animation, secondaryAnimation, child) {
+            return FadeTransition(
+              opacity: CurveTween(curve: Curves.easeInOutCirc).animate(animation),
+              child: child,
+            );
+          },);
+      }
+    )
+  ]);
+
+dashboard file
+body: Center(
+        child: ElevatedButton(
+          onPressed: () => context.push('/profile'),
+          child: Text('Go to Profile page')
+        ),
+      )
+
+profile file
+body: Center(
+    child: Text('This is profile page', style: TextStyle(fontSize: 20),)   
+),  

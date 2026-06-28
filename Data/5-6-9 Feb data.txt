@@ -1,0 +1,242 @@
+riverpod_practise folder
+
+1) static StateProvider  Provider((Ref ref)
+
+2) CounterProvider   
+    StateProvider((Ref ref) updatecounter
+    (ref.read(counterProvider.notifier).state ++;)
+
+3) StatefulConsumer 
+    
+    TextEditing
+    ConsumerStatefulWidget
+    (StatelessWidget → no local state, StatefulWidget → has local state)
+
+4) FutureProvider
+    GreetingAysnc , FakeApiScreen
+    (ref.refresh(provider)) --->  Re-runs the future, Refetches data
+
+5) StreamProvider
+    TimerScreen, fake_stream_service
+    (Stream.periodic(Duration(seconds: 1), (count) => (count));)
+
+6) StateNotifierProvider    (Used for Multiple methods (increment, reset, etc.))
+
+    i) counter_example 
+        counter provider controller (increment, decrement, reset)
+        counter screen, 
+
+        //StateNotifierProvider<Object, dynamic>
+        final counter2Provider = StateNotifierProvider<CounterNotifier, int>((_) {
+        return CounterNotifier(0);
+
+    ii) todo_example
+        todo_model, todo_provider_controller, todo_screen
+        final todoListProvider = StateNotifierProvider<TodoListNotifier, List<Todo>>(
+            (ref) => TodoListNotifier([]));
+
+7) Async Notifier. (StateNotifier + FutureProvider combined.)
+    GreetingAsyncNotifier, AsyncNotifierScreen
+
+    Different methods AsyncData, AsysncLoading, AsyncError
+
+    class GreetingAsyncNotifier extends AsyncNotifier<String> {
+        @override
+        Future<String> build() async {
+
+8) .family and .autoDispose methods
+
+    final greetingAsync = ref.watch(greetingAsyncProvider(1));
+    final greeingAsyncNotifier = ref.read(greetingAsyncProvider(1).notifier);
+
+    final greetingAsyncProvider = AsyncNotifierProvider.autoDispose.family<GreetingAsyncNotifier, String, int>(
+        () => GreetingAsyncNotifier());
+
+    class GreetingAsyncNotifier extends AutoDisposeFamilyAsyncNotifier<String, int> {
+    @override
+    Future<String> build(id) async {
+
+9) Computed and Derived Provider ---> (A provider that depends on other providers.)
+    Computed_provider, computed_screeen (used todos file as model)
+
+    final todoListProvider = StateNotifierProvider<TodoListNotifier, List<Todo>>(
+        (ref) => TodoListNotifier([]),
+        );
+
+        final filterTextProvider = StateProvider<String>((_) => '');
+
+        final filteredTodoProvider = Provider<List<Todo>>((ref) {
+        final todos = ref.watch(todoListProvider);
+        final filter = ref.watch(filterTextProvider);
+
+      (  final todos = ref.watch(filteredTodoProvider);
+        final notifier = ref.read(todoListProvider.notifier); )
+
+10) .select
+    .select() is used to:
+    Listen to only a small part of a provider’s state instead of the whole state.
+
+    It helps:
+    Reduce unnecessary rebuilds
+    Improve performance
+    Make large lists efficient
+
+
+------------------------------------------------------------------
+
+8) .family and .autoDispose methods 
+
+i)family
+Problem without .family
+Suppose you want greetings for different users:
+
+    User 1 → “Hello Yash”
+    User 2 → “Hello Admin”
+    User 3 → “Hello Guest”
+
+Without .family, you’d need multiple providers:
+
+    greetingUser1Provider
+    greetingUser2Provider
+    greetingUser3Provider
+
+Solution:  
+    final greetingAsyncProvider =
+    AsyncNotifierProvider.family<GreetingAsyncNotifier, String, int>(
+        () => GreetingAsyncNotifier(),
+    );
+
+Now the provider accepts a parameter (int id).
+
+Usage:
+    ref.watch(greetingAsyncProvider(1));
+    ref.watch(greetingAsyncProvider(2));
+
+
+ii) autoDispose
+
+Problem without .autoDispose
+Riverpod keeps providers alive forever by default.
+
+That means:
+    open screen → API call
+    leave screen → provider still in memory 
+    come back → old cached data
+    Sometimes this is bad.
+
+.autoDispose = automatic cleanup
+AsyncNotifierProvider.autoDispose.family(...)
+
+Now:
+    Screen opened → provider created
+    Screen removed → provider destroyed
+
+Memory freed 
+------------------------------------------------------------------
+
+watch → rebuilds UI when value changes
+read → does NOT rebuild immediately
+.notifier → gives access to modify state
+.state → actual value
+
+---------------------------------------------------------------------
+
+//////Providers
+1 StateProvider
+2 ConsumerStatefulWidget
+3 FutureProvider
+4 StreamProvider
+5 StateNotifierProvider
+6 AsyncNotifier
+7 family & autoDispose
+8 Derived Provider
+9 select
+
+///////Type of Ref
+WidgetRef (Used inside UI widgets)
+ProviderRef (Used inside providers)
+Ref
+
+//////ref methods
+
+ref.keepAlive 
+(Used with autoDispose)
+
+ref.onDispose 
+    (not required autoDispose) (Runs when provider is destroyed, Cleanup function)
+
+ref.invalidate(provider) 
+    (Forces provider to rebuild, Refresh provider manually)
+
+ref.listen() 
+    (Listen to changes without rebuilding UI)
+
+ref.Cancel/ ref.Resume
+    Used in advanced async cases (like streams)
+    cancel() → stop listening temporarily
+    resume() → start again
+
+ref.onAddListener 
+    (Runs when first listener starts watching provider)
+
+ref.onRemoverListener
+    (Runs when a listener stops watching)
+
+---------------------------------------------------------------------
+
+////ProviderObserver 
+
+(It is used to monitor providers)
+    It watches:
+        When provider is created
+        When provider value changes
+        When provider is destroyed
+
+    How to Use
+        void main() {
+            runApp(ProviderScope(
+                observers: [MyObserver()],
+                child: MyApp(),
+                ),
+            );
+        }
+    Then create:
+        class MyObserver extends ProviderObserver {
+
+
+@override. // Provider value changes, Provider state changed (It gives: old value, new value)
+didUpdateProvider(  
+    ProviderBase provider,
+    Object? previousValue,
+    Object? newValue,
+    ProviderContainer container
+) {}
+    
+@override. // Provider is created for first time, A provider started
+didAddProvider(
+    ProviderBase provider,
+    Object? value,
+    ProviderContainer container
+) {}
+
+@override  // Provider is destroyed, Provider ended 
+(Example: autoDispose provider removed, Screen closed)
+didDisposeProvider(
+    ProviderBase provider,
+    ProviderContainer container
+) {}
+
+//Mostly ProviderObserver is use for?
+Debugging, Logging, Tracking state changes, Finding rebuild issues
+//ProviderObserver = Debug tool to watch provider lifecycle
+
+---------------------------------------------------------------------
+
+Quick Recap :
+
+StateProvider → for simple state (counter, toggle)
+StateNotifierProvider → for complex logic & multiple methods
+FutureProvider → simple one-time async
+AsyncNotifier → async + custom methods + more control
+.family allows a provider to accept parameters and create multiple instances based on input
+.select() reduces unnecessary rebuilds by listening to only a specific part of state

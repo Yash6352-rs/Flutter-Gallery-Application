@@ -1,0 +1,677 @@
+22- Jan - 2026
+Text, Image, Center, Container, Row, Column, InkWell, Button, ScrollVIew, ListView, Padding, Margin,
+Padding, Decoration, Expanded , 
+
+
+23 - Jan - 2026
+CircleAvatar, Font, Card (properties elevation, shadowColor),
+Theme and styling font with Theme textTheme and from other dart file,
+TextField (to take input), 
+DateTime (for current date and time), plus format date using DateFormat
+
+GridView (GridView.count, GridView.extent, GridView.builder)
+DateTime (showDatePicker), TimeOfDay (showTimePicker)
+
+
+
+
+........................................................................................
+Text, Center,Container
+
+Center(
+          child: Container(
+          color: Colors.yellow,
+          child: Text("Hello World",  style: TextStyle(fontSize: 54,fontWeight: FontWeight.bold)),
+        ),
+      ),
+
+........................................................................................
+/* InkWell, Center , Container
+
+      Center(
+        child: InkWell(
+          onTap: (){
+            print('Tappp');
+          },
+          onLongPress: () {
+            print('Long tappp');
+          },
+          onDoubleTap: () {
+            print('Double tappp');
+          },
+
+          child: Container(
+            width: 200,
+            height: 200,
+            color: Colors.amber,
+
+            child: Center( 
+              child: InkWell(
+                onTap: () {
+                  print('Text is tappp');
+                },
+                onLongPress: () {
+                  print('Text is Long tappp');
+                },
+                onDoubleTap: () {
+                  print('Text is Double tappp');
+                },
+                child: Text('Hello World', style: TextStyle(fontSize: 34, fontWeight: FontWeight.bold)),
+          ),
+        )
+      )
+      )
+      )
+*/
+
+........................................................................................
+ScrollView , Padding
+
+      Padding (
+        padding: const EdgeInsets.all(8.0),
+
+        child: SingleChildScrollView(
+          child: Column(
+          children: [
+            Padding (
+              padding: const EdgeInsets.all(8.0),
+              child: SingleChildScrollView(
+                scrollDirection: Axis.horizontal,
+                child: Row(
+                  children: [
+                    Container(
+                      margin: EdgeInsets.only(right:11),
+                      height: 200,
+                      width: 200,
+                      color:Colors.lightGreen
+                    ),
+                    Container(
+                      margin: EdgeInsets.only(right:11),
+                      height: 200,
+                      width: 200,
+                      color:Colors.orange
+                    ),
+                    Container(
+                      margin: EdgeInsets.only(right:11),
+                      height: 200,
+                      width: 200,
+                      color:Colors.yellow
+                    ),
+                    Container(
+                      margin: EdgeInsets.only(right:11),
+                      height: 200,
+                      width: 200,
+                      color:Colors.blue
+                    ),
+                    Container(
+                      margin: EdgeInsets.only(right:11),
+                      height: 200,
+                      width: 200,
+                      color:Colors.red
+                    ),
+                ],),
+              )
+            ),
+            Container(
+              margin: EdgeInsets.only(bottom:11),
+              height: 200,
+              color:Colors.lightGreen
+            ),
+            Container(
+              margin: EdgeInsets.only(bottom:11),
+              height: 200,
+              color:Colors.orange
+            ),
+            Container(
+              margin: EdgeInsets.only(bottom:11),
+              height: 200,
+              color:Colors.yellow
+            ),
+            Container(
+              margin: EdgeInsets.only(bottom:11),
+              height: 200,
+              color:Colors.blue
+            ),
+            Container(
+              margin: EdgeInsets.only(bottom:11),
+              height: 200,
+              color:Colors.red
+            ),
+        ],
+      )
+      )
+      )
+    */
+
+........................................................................................
+
+/* Margin and Padding
+
+    Container(
+        color: Colors.grey,
+        margin: EdgeInsets.all(20),
+        child: Padding(
+        padding: EdgeInsets.only(top: 30, bottom: 20, right: 20, left:30),
+            child: Text('Hello World', style: TextStyle(fontSize: 25, fontWeight: FontWeight.bold)),
+    )
+)
+*/
+
+........................................................................................
+
+Expanded widget
+
+Expanded(
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Expanded(
+            flex: 2,
+            child: Container(   
+              height: 150,
+              color: Colors.yellow
+            ),
+          ),
+
+          Expanded(
+            flex: 4,
+            child: Container(
+              height: 150,
+              color: Colors.red
+            ),
+          ),
+
+          Expanded(
+            flex: 2,
+            child: Container(
+              height: 150,
+              color: Colors.green
+            ),
+          ),
+
+          Expanded(
+            flex: 1,
+            child: Container(
+              height: 150,
+              color: Colors.blue
+            ),
+          ),
+        
+        ],)
+      
+........................................................................................
+
+// ListView , ListView.builder, ListView.separated
+
+    var arrNames = ['Aaa','Bbb', 'Ccc', 'Ddd', 'Eee', 'Fff'];
+
+      /*ListView.separated(itemBuilder: (context, index){
+        return Text(arrNames[index], style: TextStyle(fontSize: 21, fontWeight: FontWeight.bold));
+      },
+      itemCount: arrNames.length,
+      separatorBuilder: (context,index) {
+        return Divider(height: 50, thickness: 2,);
+      },
+      
+      )
+ */  
+
+/* ListTile
+
+       ListView.separated(itemBuilder: (context, index) {
+        return ListTile(
+          leading: Text('${index+1}'),
+          title: Text(arrNames[index]),
+          subtitle: Text('Number'),
+          trailing: Icon(Icons.add),
+        );
+      
+      },
+      itemCount: arrNames.length,
+      separatorBuilder: (context, index){
+        return Divider(height: 20, thickness: 1,);
+      },
+      )
+*/
+
+........................................................................................
+             
+/* Decoration
+      
+      Container(
+        width: double.infinity,
+        height: double.infinity,
+        color: Colors.blue.shade50,
+
+        child: Center(
+          child: Container(
+            width: 150,
+            height: 150,
+            decoration: BoxDecoration(
+              color: Colors.blueGrey,
+              //borderRadius: BorderRadius.circular(20),
+              border: Border.all(
+                width: 6,
+                color: Colors.black
+              ),
+              boxShadow: [
+                BoxShadow(
+                  blurRadius: 52,
+                  color: Colors.grey,
+                  spreadRadius: 20,
+                )
+              ],
+              shape: BoxShape.circle
+              
+            ),
+
+          ),
+        )
+      )
+    */
+
+
+........................................................................................
+
+/* CircleAvatar
+
+    Center(
+        child: CircleAvatar(
+          child: Container(
+            width: 55,
+            height: 55,
+            child: Column(   
+              children: [
+                Container(
+                  width: 30,
+                  height: 30,
+                  child: Image.asset('assets/images/logo.png'),
+                ),
+                Text('Name'),           
+              ],
+            ),
+          ),
+            backgroundColor: Colors.green,
+            //minRadius: 50,
+            maxRadius: 50,
+            ),
+        )
+*/
+
+/* Font .....download from google font zip file add ttf file assets folder
+Center(
+        child: Column(
+          children: [
+            Text('Hello World', style: TextStyle(fontFamily: 'FontMain',fontSize: 35),),
+            Text('Hello World', style: TextStyle(fontFamily: 'FontMain',fontSize: 35),),
+          ],
+        )
+)
+*/
+
+........................................................................................
+
+/* Theme and style
+
+1. in same file
+
+theme: ThemeData(
+    primarySwatch: Colors.blue,
+    textTheme: const TextTheme(
+          displaySmall: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+          titleMedium: TextStyle(fontSize: 35),
+    ),
+),
+
+    body: Center(
+        child: Column(
+          children: [
+            Text('Hello World', style: Theme.of(context).textTheme.displayMedium),
+            Text('Hello World', style: Theme.of(context).textTheme.displaySmall),
+          ],
+        )
+      )
+
+
+2. style from other file 
+
+util.dart 
+
+import 'package:flutter/material.dart';
+
+// Without Arguments
+TextStyle mainTextStyle() {
+  return TextStyle(
+    fontSize: 40,
+  );
+}
+
+// With Arguments
+TextStyle mainTextStyle2({Color textColor = Colors.black,}) {
+  return TextStyle(
+    fontSize: 40,
+    fontWeight: FontWeight.bold,
+    color: textColor,
+  );
+}
+
+main.dart
+Center(
+        child: Column(
+          children: [
+
+            //style by TextTheme displayMedium
+            Text('Hello World', style: Theme.of(context).textTheme.displayMedium),
+
+            //style by TextTheme displaySmall
+            Text('Hello World', style: Theme.of(context).textTheme.displaySmall),
+
+            // Style by other dart file Without Arguments
+            Text('Style by other dart file', style: mainTextStyle()),
+
+             // Style by other dart file With Arguments
+            Text('Style by other dart file with arguments', style: mainTextStyle2(textColor: Colors.red)),
+          ],
+        )
+)
+*/
+
+........................................................................................
+
+/* Card properties elevation, shadowColor
+Center(
+        child: Card(
+          elevation:11,
+          shadowColor: Colors.red,
+          child: Padding(
+              padding: const EdgeInsets.all(10.0),
+              child: Text('Hello', style: TextStyle(fontSize: 25, fontWeight: FontWeight.bold),) 
+          )
+        )
+)
+*/
+
+........................................................................................
+
+/* TextField Example 
+
+with decoration (focusedBorder, enabledBorder, disabledBorder)
+hintText, prefixText, prefixIcon, suffixIcon:
+controller
+
+Create Login email,password, ElevatedButton with print email and password in terminal
+
+class _MyHomePageState extends State<MyHomePage> {
+  var emailText = TextEditingController();
+  var passText = TextEditingController();
+
+
+     body: Center(
+        child: Container(
+          width: 300,
+          child: Column(
+            mainAxisAlignment:  MainAxisAlignment.center,
+            children: [
+              TextField(
+                //enabled: false,  .......to disable field
+                //keyboardType: TextInputType.phone,   .....to change keyboard
+
+                controller: emailText,
+                decoration: InputDecoration(
+                  focusedBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(11),
+                    borderSide: BorderSide(color: Colors.amber, width: 2)
+                  ),
+
+                  enabledBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(11),
+                    borderSide: BorderSide(color: Colors.blue)
+                  ),
+
+                  disabledBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(11),
+                    borderSide: BorderSide(color: Colors.grey)
+                  ),
+
+                  hintText: "Enter Email",
+
+                  //prefixText: "Enter Email",
+                  prefixIcon: Icon(Icons.email),
+                  suffixIcon: IconButton(
+                    icon: Icon(Icons.remove_red_eye,),
+                    onPressed: () {},
+                  )
+                ),
+
+              ),
+
+              Container(height: 20,),
+
+              TextField(
+                controller: passText,
+                obscureText: true,
+                obscuringCharacter: '*',
+                decoration: InputDecoration(                 
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(11),
+                    borderSide: BorderSide(width: 2)
+                  ),
+              
+                hintText: "Enter Password",
+                //prefixText: "Enter Password",
+                prefixIcon: Icon(Icons.password),
+                suffixIcon: IconButton(
+                    icon: Icon(Icons.remove_red_eye,),
+                    onPressed: () {},
+                  )
+                ),               
+              ),
+
+              Container(height: 20,),
+
+              ElevatedButton( onPressed: () {
+                  String uEmail = emailText.text.toString();
+                  String uPass = passText.text.toString();
+
+                  print("Email: $uEmail, Password: $uPass");
+                }, 
+                child: Text('Login')
+              )
+
+            ],
+          )
+        )
+      )
+
+    );
+  }
+}
+*/
+
+........................................................................................
+
+/* Current Date And Time
+
+class _MyAppState extends State<MyApp> {
+
+  DateTime time = DateTime.now();
+
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      home: Scaffold(
+        appBar: AppBar(
+          title: const Text(
+            "My First Flutter App",
+            style: TextStyle(color: Colors.purple),
+          ),
+        ),
+        body: Center(
+          child: Container(
+            width: 200,
+            height: 200,
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text("Current Time: $time", style: TextStyle(fontSize: 25),),
+
+                //with date format
+                Text("Current Time: ${DateFormat('jms').format(time)}", style: TextStyle(fontSize: 25),),
+                Text("Current Date: ${DateFormat('yMMMMd').format(time)}", style: TextStyle(fontSize: 25),), 
+
+                ElevatedButton(
+                  onPressed: () {
+                    setState(() {
+                      time = DateTime.now();
+                    });
+                  },
+                  child: const Text("Update time"),
+                ),
+              ],
+            ),
+          ),
+        ),
+*/
+........................................................................................
+
+/*  showDatePicker, showTimePicker
+class _HomePageState extends State<HomePage> {
+
+  DateTime? selectedDate;
+  TimeOfDay?selectedTime;
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(title: Text("MY APP")),
+      body: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+
+            ElevatedButton(
+              child: Text("Select Date"),
+              onPressed: () async {
+                DateTime? date = await showDatePicker(
+                  context: context,
+                  initialDate: DateTime.now(),
+                  firstDate: DateTime(2024),
+                  lastDate: DateTime(2030),
+                );
+
+                if (date != null) {
+                  setState(() {
+                    selectedDate = date;
+                  });
+                }
+              },
+            ),
+            Container(height: 10,),
+            Text(
+              "Selected Date: ${selectedDate?.day}-${selectedDate?.month}-${selectedDate?.year}",
+              style: TextStyle(fontSize: 18),
+            ),
+            Container(height: 30,),
+            ElevatedButton(
+              onPressed: () async {
+                TimeOfDay? pickedTime = await showTimePicker(
+                  context: context,
+                  initialTime: TimeOfDay.now(),
+                  initialEntryMode: TimePickerEntryMode.input,
+                );
+
+                if (pickedTime != null) {
+                  setState(() {
+                    selectedTime = pickedTime;
+                  });
+
+                }
+            },
+            child: Text("Select Time"),
+            ),
+                        Text(
+              "Selected Time: ${selectedTime?.hour}:${selectedTime?.minute}",
+              style: TextStyle(fontSize: 18),
+            ),
+          ],
+        ),
+      ),
+*/     
+
+........................................................................................
+
+/* GridView (GridView.count,GridView.extent)
+ body: Column(
+          children: [
+            Container(
+              height: 200,
+              child: GridView.count(crossAxisCount: 4,
+              crossAxisSpacing: 11,
+              mainAxisSpacing: 11,
+                children: [
+                  Container(color: Colors.red,),
+                  Container(color: Colors.yellow,),
+                  Container(color: Colors.green,),
+                  Container(color: Colors.blue,),
+                  Container(color: Colors.grey,),
+                  Container(color: Colors.purple,),
+                  Container(color: Colors.pink,),
+                  Container(color: Colors.amber,),
+                  Container(color: Colors.black,),
+                  Container(color: Colors. teal,),
+                ],
+              ),
+            ),
+
+            Container(height: 100,),
+
+            Container(
+              height: 200,
+              child: GridView.extent(maxCrossAxisExtent: 100,
+              crossAxisSpacing: 11,
+                mainAxisSpacing: 11,
+                  children: [
+                    Container(color: Colors.red,),
+                    Container(color: Colors.yellow,),
+                    Container(color: Colors.green,),
+                    Container(color: Colors.blue,),
+                    Container(color: Colors.grey,),
+                    Container(color: Colors.purple,),
+                    Container(color: Colors.pink,),
+                    Container(color: Colors.amber,),
+                    Container(color: Colors.black,),
+                    Container(color: Colors. teal,),
+                  ],
+              )
+            )
+        ])
+*/
+
+GridView (GridView.builder)
+
+  Widget build(BuildContext context) {
+
+    var arrColors = [Colors.red,
+     Colors.blue,
+     Colors.green,
+     Colors.yellow,
+     Colors.grey,
+     Colors.pink,
+     Colors.purple,
+     Colors.cyan,
+     Colors.purple,];
+
+    return Scaffold(
+      appBar: AppBar(title: Text("MY APP")),
+      body: GridView.builder(itemBuilder: (context, index){
+        return Container(color: arrColors[index]);
+      }, itemCount: arrColors.length,
+
+      // for fixed no of items , item size will increase 
+      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+        crossAxisCount: 3, crossAxisSpacing: 11, mainAxisSpacing: 11),
+
+      // not for fixed no of items , item count will increase  
+        //gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
+        //  maxCrossAxisExtent: 100, crossAxisSpacing: 11, mainAxisSpacing: 11), 
+)

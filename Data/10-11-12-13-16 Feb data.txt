@@ -1,0 +1,335 @@
+MVVM Architecture (Day 11-12-13-16)
+
+main.dart 
+view_model - login_provider.dart , user_list_provider.dart 
+views - SplashScreen.dart, LoginScreen.dart , HomeScreen.dart 
+utils - appColor.dart , appStyle.dart , commonToast.dart 
+routes - NameRoute.dart , routes.dart
+
+model/
+    - models/user_list.dart 
+    - repository/repository.dart 
+    - services/api_response.dart, app_exception.dart,  network_services.dart
+
+app_store - app_store.dart 
+
+----------------------------------------------------------------
+
+Gallery + Video Player App
+(Flutter • Riverpod • Dio • GoRouter • MVVM)
+
+1 Splash Screen
+   Intro screen with gradient/theme styling and auto navigation.
+
+2 API Integration (Dio)
+   Fetched media data from network and converted JSON into models.
+
+3 Media Model
+   Created MediaModel with image & video type handling.
+
+4 Repository Layer
+   Separated API logic from UI using clean structure.
+
+5 Riverpod State Management
+   Used FutureProvider for fetching media and StateNotifierProvider for liked items.
+
+6 SharedPreferences (Local Storage Persistence)
+   Saved liked photos & videos locally so they remain even after app restart.
+   Converted MediaModel to JSON and stored as StringList in device storage.   
+
+7 Home Screen
+   GridView displaying images & videos with video indicator overlay.
+
+8 Video Player Integration
+   Implemented network video playback with play/pause control.
+
+9 Detail Screen
+   Full screen preview with:
+   Hero animation
+   Like/Unlike button
+   Video player support
+
+10 Liked Provider
+   Add/remove media from favorites using Riverpod state management.
+Liked Screen
+   Grid of favorited images & videos with navigation support.
+
+11 Library Screen
+   Custom folder-style UI:
+   Images folder
+   Videos folder
+   Filtered grid based on selection
+
+12 Bottom Navigation (MainScreen)
+   Implemented tab-based navigation:
+   All Photos
+   Library
+   Liked
+
+13 Hero Animations
+   Smooth transition between grid and detail screen.
+
+14 Clean Architecture Structure (MVVM)
+   Organized folders:
+   data (model - media_model / service - api_service / repository - media_repository)
+   view (splash_screen, main_screen, home_screen, libray_screen, liked_screen, detail_screen )
+   view_model (media_provider, liked_provider)
+   routes (app_router)
+   main.dart
+
+15 Theme & UI Consistency
+   Custom color palette:
+      Primary purple
+      Soft pink liked icon
+      Custom folder background
+      Styled AppBar
+
+16 Settings Screen
+   Created structured settings page with reusable list tiles and theme-aware UI styling.
+
+17 About Screen
+   Added app information screen with version, developer details and proper light/dark theme support.
+
+18 Dynamic Dark Mode Toggle (AppBar Action)
+   Moved dark mode switch outside 3-dot menu for better UX and instant theme switching.
+   Added persistent dark/light mode using SharedPreferences
+
+19 Theme Refactoring
+   Removed hardcoded colors and updated UI to use Theme.of(context) for proper light/dark consistency.
+
+20 Improved Folder UI Design
+   Enhanced library folder cards with adaptive colors for both light and dark mode.
+
+21 Collection Management Section
+   Added structured management section (Bin,Documents, Archive, Locked) below folders for better organization.
+
+22 Feature Placeholder Handling
+   Implemented “Feature Coming Soon” feedback using reusable SnackBar utility for incomplete features.
+
+23. Detail Screen Properties Panel
+   Added a “Properties” button in the detail view that opens a showModalBottomSheet to display media information.
+   Such as title, type, URL, and video duration.
+
+24. Soft Delete & Bin Management
+   Implemented soft delete functionality using a DeletedProvider to move media to a Bin section 
+   with restore support and persistent storage via SharedPreferences.   
+
+25. Locked Media Management
+   Added password-protected Locked Folder with hide/unhide functionality, state filtering across screens, 
+   and local persistence using SharedPreferences.
+
+26. Dynamic Grid Layout Selector
+   Implemented customizable grid layout feature using a gridCountProvider (Riverpod).
+   Added a Grid icon in the AppBar that opens a showModalBottomSheet allowing users to select 2, 3, or 4 columns 
+   with active selection highlighting for better UX.
+
+27. Swipeable Detail Viewer
+   Implemented horizontal swipe navigation in DetailScreen using PageView, allowing users to swipe left/right to 
+   browse media seamlessly while preserving Hero animations and video playback support.
+
+28. GitHub Integration & Version Management
+   Implemented proper Git workflow (add, commit, push) and maintained project history on GitHub.
+
+--------------------------------------------------------------
+
+POST https://dummyjson.com/auth/login
+GET https://dummyjson.com/users
+
+{
+  "username": "emilys",
+  "password": "emilyspass"
+}
+
+{
+  "username": "michaelw",
+  "password": "michaelwpass"
+}
+
+{
+  "username": "jamesd",
+  "password": "jamesdpass"
+}
+
+----------------------------------------------------------------
+
+In MVVM Architecture
+
+In MVVM:
+
+main.dart = App setup layer
+It does NOT contain business logic
+It does NOT call APIs
+It only sets:
+Theme
+Routing
+Entry point
+
+In MVVM:
+View → ViewModel → Repository → Network → API
+
+----------------------------------------------------------------
+
+When Login Button Pressed:
+LoginScreen
+   ↓
+LoginProvider.userLogin()
+   ↓
+setLoading(true)
+   ↓
+Repository.userLogin()
+   ↓
+NetworkService.postApi()
+   ↓
+API
+   ↓
+Response
+   ↓
+Save token
+   ↓
+Navigate to Home
+   ↓
+setLoading(false)
+
+----------------------------------------------------------------
+
+When HomeScreen loads:
+
+HomeScreen
+   ↓
+UserListProvider
+   ↓
+AppRepository.userList()
+   ↓
+NetworkApiServices.getApi()
+   ↓
+API
+   ↓
+JSON
+   ↓
+UserList.fromJson()
+   ↓
+UserList object
+   ↓
+Provider notifies UI
+   ↓
+ListView shows users
+
+----------------------------------------------------------------
+
+What is <T>?
+This is called Generic Type.
+It means: This class can store ANY type of data.
+
+----------------------------------------------------------------
+
+Incase of error
+View
+  ↓
+ViewModel
+  ↓
+Repository
+  ↓
+Network Service
+  ↓
+AppException (if error)
+Errors travel upward in controlled way
+
+----------------------------------------------------------------
+
+FULL FLOW WHEN USER OPENS HOME
+User logs in
+   ↓
+Navigates to HomeScreen
+   ↓
+initState()
+   ↓
+fetchUserList()
+   ↓
+ApiResponse.loading()
+   ↓
+UI shows spinner
+   ↓
+Repository gets data
+   ↓
+ApiResponse.complete(data)
+   ↓
+notifyListeners()
+   ↓
+Consumer rebuilds
+   ↓
+ListView shows users
+
+----------------------------------------------------------------
+
+Complete Flow When App Starts
+App starts
+   ↓
+main.dart
+   ↓
+SplashScreen
+   ↓
+_getToken()
+   ↓
+Check SharedPreferences
+   ↓
+Wait 2 seconds
+   ↓
+If token empty → Login
+If token exists → Home
+
+----------------------------------------------------------------
+
+Your Full App Flow Now
+APP START
+   ↓
+SplashScreen
+   ↓
+Check Token
+   ↓
+LoginScreen
+   ↓
+LoginProvider
+   ↓
+Repository
+   ↓
+Network
+   ↓
+Save Token
+   ↓
+HomeScreen
+   ↓
+UserListProvider
+   ↓
+Repository
+   ↓
+Network
+   ↓
+Show Users
+
+----------------------------------------------------------------
+
+Fastest way to push future changes from your VS Code terminal or any terminal:
+
+Stage all changes
+   git add .
+
+Commit with a message
+   git commit -m "Your descriptive message here"
+
+Push to GitHub
+   git push
+
+You can do all three steps (add → commit → push) in one line like this:
+   git add . && git commit -m "Your message here" && git push
+   
+
+
+I already have git done on this project
+project me further command that modify can also get saved on github
+
+git pull origin main --rebase
+git add.
+get commit
+git push origin main
+
+----------------------------------------------------------------

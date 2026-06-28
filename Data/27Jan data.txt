@@ -1,0 +1,650 @@
+1) splitting widget in classes
+create classes and call them in main code
+
+2) custom widget
+create other class and call them in main code
+
+3) Stack widget 
+
+4) Wrap widget
+
+5) SizedBox
+  SizedBox.expand, SizedBox.shrink, SizedBox.square
+
+6) RichText
+
+7) Icon and FontAwesomeIcons
+
+8) Positioned (Used with Stack)
+
+9) StatefulWidget and setState and made a counter app
+(counter increase when button clicked)
+
+10) StatefulWidget and setState and made a basic calculator app
+(add, sub, mul, divide)
+
+11) List Item mapped directly to ListView
+Input is List (an array) and Input is List (map)
+
+
+
+--------------------------------------------------------------
+
+1) splitting widget in classes
+create classes and call them in main code
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        backgroundColor: Theme.of(context).colorScheme.inversePrimary,
+        title: Text("Custom Widget"),
+      ),
+      body: Container(
+        child: Column(
+          children: [
+            CatItem(),
+            ContactItem(),
+            MidItem(),
+            LastItem(), 
+          ],
+        )
+      )
+    );
+  }
+}
+
+class CatItem extends StatelessWidget{
+
+    Widget build(BuildContext context) {
+      return Expanded(
+              flex: 1,
+              child:  Container(
+              color: Colors.blue,
+              child: ListView.builder(itemBuilder: (context, index) => Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: SizedBox(
+                  width: 100,
+                  child: CircleAvatar(
+                  backgroundColor: Colors.green,
+                ),
+                ),
+                ), itemCount: 10, scrollDirection: Axis.horizontal),
+              )
+            );
+    }
+}
+
+
+class ContactItem extends StatelessWidget{
+
+    Widget build(BuildContext context) {
+      return  Expanded(
+              flex: 4,
+              child: Container(
+                color: Colors.orange,
+                child: ListView.builder(itemBuilder: (context, index) => Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: ListTile(
+                    leading: CircleAvatar(
+                      backgroundColor: Colors.green,
+                    ),
+                    title: Text('Name'),
+                    subtitle: Text('Mobile No'),
+                  )
+                ),itemCount: 20,),
+              )
+              );
+    }
+}
+
+
+class MidItem extends StatelessWidget{
+
+    Widget build(BuildContext context) {
+      return Expanded(
+                flex:2,child: Container(
+                  color: Colors.grey,
+                  child: ListView.builder(itemBuilder: (context, index) =>
+                  Padding(padding: const EdgeInsets.all(8.0),
+                  child: Container(
+                    width: 200,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(11),
+                      color: Colors.blue,
+                    ),
+                  ),
+                  ),itemCount: 10, scrollDirection: Axis.horizontal,
+                  )
+
+
+              ));
+    }
+}
+
+
+class LastItem extends StatelessWidget{
+
+    Widget build(BuildContext context) {
+      return Expanded(
+                flex: 2,
+                child: Container(
+                  color: Colors.green,
+                  child: GridView.count(crossAxisCount: 4,
+                  children: [
+                    Padding(padding: const EdgeInsets.all(8.0),
+                      child: Container(
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(11),
+                          color: Colors.blue,
+                        )
+                      ),
+                    ), 
+
+                    Padding(padding: const EdgeInsets.all(8.0),
+                      child: Container(
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(11),
+                          color: Colors.blue,
+                        )
+                      ),
+                    ),
+                    Padding(padding: const EdgeInsets.all(8.0),
+                      child: Container(
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(11),
+                          color: Colors.blue,
+                        )
+                      ),
+                    ),
+                     Padding(padding: const EdgeInsets.all(8.0),
+                      child: Container(
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(11),
+                          color: Colors.blue,
+                        )
+                      ),
+                    ),
+                    
+                  ],)
+
+              ));
+    }
+}
+---------------------------------------------------------------
+
+
+2) custom widget and rounded_btn.dart file
+
+body: Column(
+        children: [
+         
+         Container(
+            width: 150,
+            height: 50,
+            child: RoundedButton(
+              btnName: 'Login',
+              icon: Icon(Icons.lock),
+              callBack: () {
+                print('Logged In');
+              },
+            ),
+          ),
+
+          Container(height: 20,),
+      
+          Container(
+            width: 150,
+            height: 50,
+            child: RoundedButton(
+              btnName: 'Play',
+              icon: Icon(Icons.play_arrow),
+              callBack: () {
+                print('Play');
+              },
+            )
+          ),
+      ])
+       
+    );
+  }
+}
+
+----------------------------------------------------------------
+
+3) Stack widget 
+
+body: Container(
+        width: 300,
+        height: 300,
+        child: Stack(
+          children: [
+            Container(
+              width: 200,
+              height: 200,
+              color: Colors.amber
+            ),
+
+            Positioned(
+              left: 21,top: 21,
+              child: Container(
+                width: 200,
+                height: 200,
+                color: Colors.blue
+              )
+            )
+        ],
+      )
+    )
+
+----------------------------------------------------------------
+
+4) Wrap widget    
+
+Container(
+        width: double.infinity,
+        height: double.infinity,
+        child: Wrap(
+          direction: Axis.vertical,
+          spacing: 11,
+          runSpacing: 11,
+          alignment: WrapAlignment.spaceEvenly,
+          children: [
+            Container(
+              width: 120,
+              height: 120,
+              color: Colors.blue,
+            ),
+            Container(
+              width: 120,
+              height: 120,
+              color: Colors.red,
+            ),
+            Container(
+              width: 120,
+              height: 120,
+              color: Colors.amber,
+            ),
+            Container(
+              width: 120,
+              height: 120,
+              color: Colors.green,
+            ),
+            Container(
+              width: 120,
+              height: 120,
+              color: Colors.grey,
+            ),
+            Container(
+              width: 120,
+              height: 120,
+              color: Colors.brown,
+            ),
+            Container(
+              width: 120,
+              height: 120,
+              color: Colors.black,
+            ),
+            Container(
+              width: 120,
+              height: 120,
+              color: Colors.orange,
+            ),
+
+          ],
+        )
+      )
+
+----------------------------------------------------------------
+5) SizedBox
+  SizedBox.expand, SizedBox.shrink, SizedBox.square
+
+Row (
+        children: [
+
+          SizedBox.square(
+           dimension: 150,
+           child: ElevatedButton(onPressed: () {},
+               child: Text('Click Me')
+            ),
+          ),
+
+          SizedBox( width: 20),
+          
+          SizedBox.square(
+           dimension: 150,
+           child: ElevatedButton(onPressed: () {},
+               child: Text('Click Me')
+            ),
+          ),
+      ])
+
+----------------------------------------------------------------
+6) RichText
+
+RichText(
+        text: TextSpan(
+          style: TextStyle(color: Colors.grey, fontSize: 20),
+          children: <TextSpan>[
+            TextSpan(text: 'Hello '),
+            TextSpan(text: ' World ', style: TextStyle(fontSize: 35, fontWeight: FontWeight.bold, color: Colors.blue)),
+            TextSpan(text: ' Welcome to '),
+            TextSpan(text: ' Flutter' , style: TextStyle(fontSize: 35, fontWeight: FontWeight.bold, fontStyle: FontStyle.italic, color: Colors.orange))
+
+          ]
+      )
+)
+      
+      
+      /* other way can be done taking Row
+      Row (
+        children: [
+          Text('Hello', style: TextStyle(fontSize: 21, color: Colors.grey)),
+          Text('World', style: TextStyle(fontSize: 34,color: Colors.blue, fontWeight: FontWeight.bold),)
+      ]) */
+
+
+----------------------------------------------------------------
+7) Icon and FontAwesomeIcons
+
+need to import
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+
+
+Center (
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            // normal icon 
+            Icon(
+              Icons.play_circle_outlined,
+              size: 100, color: Colors.orange,
+            ),
+
+            // font awesome icon
+            FaIcon(FontAwesomeIcons.amazon, size: 100, color: Colors.orange,)
+      ])
+    )
+
+----------------------------------------------------------------
+8) Positioned used in Stack
+
+Container(
+        width: 300,
+        height: 200,
+        color: Colors.blueGrey,
+        child: Stack(
+          children: [
+            Positioned(
+              bottom: 30,
+              left: 30,
+              child: Container(
+                width: 100,
+                height: 100,
+                color: Colors.white,
+              )),
+        ]),
+      )
+
+----------------------------------------------------------------
+
+9) StatefulWidget and setState and made a counter app
+(counter increase when button clicked)
+
+class MyHomePage extends StatefulWidget {
+  const MyHomePage({super.key, required this.title});
+
+  final String title;
+
+  @override
+  State<MyHomePage> createState() => MyHomeState();
+}
+
+class MyHomeState extends State<MyHomePage> {
+
+  var count = 0;
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('Stateful'),
+      ),
+      body: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Text('Count: $count', style: TextStyle(fontSize: 34),),
+            ElevatedButton(
+              onPressed: () {
+                setState(() {
+                  count++;
+                 print("Count: $count");
+                });
+
+              }, 
+              child: Text('Increment Counter')
+            )
+          ],
+
+        ),
+      ),
+
+    );
+  }
+}
+
+----------------------------------------------------------------
+
+10) StatefulWidget and setState and made a basic calculator app
+(add, sub, mul, divide)
+
+class MyHomeState extends State<MyHomePage> {
+
+  var no1 = TextEditingController();
+  var no2 = TextEditingController();
+  var result;
+
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('Basic calculator'),
+      ),
+      body: Container(
+        color: Colors.lightBlueAccent,
+
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            TextField(
+              controller: no1,
+              keyboardType: TextInputType.number,
+            ),
+
+            SizedBox(height: 20,),
+
+            TextField(
+              controller: no2,
+              keyboardType: TextInputType.number,
+
+            ),
+
+            SizedBox(height: 20,),
+
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              children: [
+                ElevatedButton(
+                  onPressed: () {                    
+                      int num1 = int.parse(no1.text);
+                      int num2 = int.parse(no2.text);
+                      var sum  = num1 + num2;
+
+                      result = "Sum is $sum";
+                      setState(() {});
+                  }, 
+                  child: Text('ADD')
+                ),
+                ElevatedButton(
+                  onPressed: () {
+                      int num1 = int.parse(no1.text);
+                      int num2 = int.parse(no2.text);
+                      var sub = num1 - num2;
+
+                      result = "Sub is $sub";                  
+                      setState(() {});
+                  }, 
+                  child: Text('SUB')
+                ),
+                ElevatedButton(
+                  onPressed: () {
+                      int num1 = int.parse(no1.text);
+                      int num2 = int.parse(no2.text);
+                      var mul = num1 * num2;
+
+                      result = "Mul is $mul";
+                      setState(() {});
+                  }, 
+                  child: Text('MUL')
+                ),
+                ElevatedButton(
+                  onPressed: () {
+                      int num1 = int.parse(no1.text);
+                      int num2 = int.parse(no2.text);
+                      var divide = num1 / num2;
+
+                      result = "Div is ${divide.toStringAsFixed(2)}";
+                      setState(() {});
+                  }, 
+                  child: Text('DIVIDE')
+                ),
+              ],              
+            ),
+            SizedBox(height: 20,),
+
+            Text('$result', style: TextStyle(fontSize: 34),),
+          ],
+
+        ),
+      ),
+
+    );
+  }
+}
+
+
+----------------------------------------------------------------
+
+11) List Item mapped directly to ListView
+Input is List (an array)
+
+class MyHomeState extends State<MyHomePage> {
+
+  var arrData = [
+    'ABC', 'DEF', 'GHI','JKL', 'MNO', 'PQR', 'STU', 'VWX', 'YZ'
+  ];
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('MY APP')
+      ),
+      body: Container(
+        child: ListView(
+          children: arrData.map((value) {
+            return Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Container(
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(21),
+                  color: Colors.lightBlueAccent,
+                ),
+                child: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Center(child: Text(value)),
+                ),
+              ),
+            );
+          }).toList()
+        ),
+      )
+
+
+Input is List (map)
+
+class MyHomeState extends State<MyHomePage> {
+
+  var arrData = [
+    {
+      'name': 'ABC',
+      'mobno': '123456789',
+      'unread': '2'
+    },
+    {
+      'name': 'ABC',
+      'mobno': '123456789',
+      'unread': '2'
+    },
+    {
+      'name': 'ABC',
+      'mobno': '123456789',
+      'unread': '2'
+    },
+    {
+      'name': 'ABC',
+      'mobno': '123456789',
+      'unread': '2'
+    },
+    {
+      'name': 'ABC',
+      'mobno': '123456789',
+      'unread': '2'
+    },
+    {
+      'name': 'ABC',
+      'mobno': '123456789',
+      'unread': '2'
+    },
+    {
+      'name': 'ABC',
+      'mobno': '123456789',
+      'unread': '2'
+    },
+    {
+      'name': 'ABC',
+      'mobno': '123456789',
+      'unread': '2'
+    },
+    {
+      'name': 'ABC',
+      'mobno': '123456789',
+      'unread': '2'
+    },
+  
+  ];
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('MY APP')
+      ),
+      body: Container(
+        child: ListView(
+          children: arrData.map((value) => 
+          ListTile(
+            leading: Icon(Icons.account_circle),
+            title: Text(value['name'].toString()),
+            subtitle: Text(value['mobno'].toString()),
+            trailing: CircleAvatar(
+              backgroundColor: Colors.green,
+              radius: 12,
+              child: Text(value['unread'].toString())),
+          ), 
+          ).toList()
+        ),
+      )
+

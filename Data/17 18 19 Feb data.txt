@@ -1,0 +1,17 @@
+Figma screen design
+
+https://www.figma.com/design/aJEBDTsgky6F3bgg24Xq6D/Mobile-and-Web-UI-Kit--190
+----Community-?node-id=0-1&p=f&t=25HPUJLIhsTXfUYV-0
+
+Screen done
+24, 25, 26, 27, 28, 32, 33
+
+24 -> first_screen
+25 -> second_screen
+26 -> fourth_screen
+27 -> fifth_screen
+28 -> third_screen
+32 -> profile_screen
+33 -> setting_screen
+
+

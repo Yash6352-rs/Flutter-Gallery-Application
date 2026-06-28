@@ -1,0 +1,153 @@
+1) Dio get request
+2) Dio post request
+3) Dio get post request concurrently
+4) Dio put request
+    (Replace / update full resource)
+    (put will try to update data if it found otherwise will create it)
+5) Dio patch request
+    (patch will update the specific data only)
+6) Dio delete request    
+7) Download file from an api 
+
+------------------------------------------------------------------
+Also done GET POST PUT PATCH DELETE with proper file structure
+dio_practise application
+
+lib 
+    models
+        create_user_request // post
+        dummy_response_model //get
+        patch_user_request //patch
+        update_user_request //put
+     screens
+        HomePage.dart 
+     services
+        api_service.dart
+    main.dart        
+
+------------------------------------------------------------------
+
+1) Dio get request
+
+ void fetchData() async {
+    Dio dio = Dio(
+      BaseOptions(
+        headers: {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json',
+        },
+      ),
+    );
+    try{
+      var response = await dio.get('https://dummyjson.com/posts/1');
+    
+      print(response.statusCode);
+      print(response.data.toString());
+    }
+    catch(e) {
+      print(e);
+    }
+  }
+
+------------------------------------------------------------------
+
+2) Dio post request
+
+    try{
+      var response = await dio.post('https://jsonplaceholder.typicode.com/posts',
+       data: {'name':'Abhi', 'email':'abc.com'});
+      
+      print(response.statusCode);
+      print(response.data.toString());
+    }
+
+------------------------------------------------------------------
+
+3) Dio get post request concurrently
+
+    try{
+      var response = await Future.wait([
+        dio.get('https://jsonplaceholder.typicode.com/posts/1'),
+        dio.post('https://jsonplaceholder.typicode.com/posts')
+      ]);
+        
+      print(response.length);  
+      print(response[0].statusCode);
+      print(response[1].statusCode);
+
+      print(response[0].data);
+      print(response[1].data);
+    }
+
+------------------------------------------------------------------
+4) Dio put request
+    (Replace / update full resource)
+    (put will try to update data if it found otherwise will create it)
+
+  void fetchData() async {
+    Dio dio = Dio(
+      BaseOptions(
+        headers: {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json',
+        },
+      ),
+    );
+    try{
+      var response = await dio.put('https://jsonplaceholder.typicode.com/posts/1',
+        data: {'name':'abc', 'email':'abc.com'});
+      print(response.data);
+    }
+    catch(e) {
+      print(e);
+    }
+  }
+
+........update
+      var response = await dio.get('https://jsonplaceholder.typicode.com/posts/1');
+
+      var response2 = await dio.put('https://jsonplaceholder.typicode.com/posts/1',
+        data: {'userId':'1', "id": '101', 'title':'abc.com'});
+      print(response.data);
+      print(response2.data);
+
+
+------------------------------------------------------------------
+5) Dio patch request
+    (patch will update the specific data only)
+
+   try{
+      var response = await dio.get('https://jsonplaceholder.typicode.com/posts/1');
+
+      var response2 = await dio.patch('https://jsonplaceholder.typicode.com/posts/1',
+        data: {'userId':'1', "id": '101', 'title':'abc.com',});
+      print(response.data);
+      print(response2.data);
+    }
+------------------------------------------------------------------
+
+6) Dio delete request
+    try{
+      var response = await dio.get('https://jsonplaceholder.typicode.com/posts/1');
+      var response2 = await dio.delete('https://jsonplaceholder.typicode.com/posts/1');
+
+      print(response.data);
+      print(response2.data);
+
+      print(response.statusCode);
+      print(response2.statusCode);
+    }
+------------------------------------------------------------------
+
+7) Download file from an api 
+
+    try{
+      Directory directory = await getApplicationDocumentsDirectory();
+      var response = await dio.download('https://raw.githubusercontent.com/EbookFoundation/free-programming-books/main/books/free-programming-books-subjects.md',
+        '${directory.path}/file.txt');
+      print(response.statusCode);
+      print('file downloaded');
+      print('File saved at: ${directory.path}/file.txt');
+    }
+
+------------------------------------------------------------------
